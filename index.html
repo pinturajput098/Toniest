@@ -9,7 +9,7 @@
         body { font-family: Arial, sans-serif; background: #1a1a1a; color: white; text-align: center; margin: 0; padding: 20px; }
         .balance-card { background: #2c2c2c; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #0088cc; }
         .btn { background: #0088cc; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 18px; cursor: pointer; width: 100%; margin: 10px 0; }
-        .btn:disabled { background: #555; }
+        .btn:active { background: #006699; }
     </style>
 </head>
 <body>
@@ -21,26 +21,26 @@
     </div>
 
     <button class="btn" onclick="watchAd()">📺 Watch Ad & Earn</button>
-    <button class="btn" id="withdrawBtn" onclick="handleWithdraw()">💸 Withdraw Fund</button>
+    <button class="btn" onclick="tg.showAlert('Minimum withdraw is $2.00')">💸 Withdraw Fund</button>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
         
-        // TERA LIVE LINK
-        const backendURL = "https://instructional-exchanges-soccer-unavailable.trycloudflare.com";
+        // TERA NAYA UPDATED LINK
+        const backendURL = "https://bra-friday-approval-std.trycloudflare.com";
         const userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : 12345;
 
-        // 1. Balance Load Karo Database Se
+        // Balance Load Karo
         async function loadBalance() {
             try {
                 const response = await fetch(`${backendURL}/get_balance?user_id=${userId}`);
                 const data = await response.json();
                 document.getElementById('balance').innerText = `$${data.balance.toFixed(4)}`;
-            } catch (e) { console.log("Error loading balance"); }
+            } catch (e) { console.log("Load error"); }
         }
 
-        // 2. Ad Dekho aur Balance Save Karo
+        // Reward Add Karo
         async function watchAd() {
             tg.showConfirm("Watch ad to earn $0.001?", async (ok) => {
                 if (ok) {
@@ -51,19 +51,14 @@
                             body: JSON.stringify({ user_id: userId })
                         });
                         if (res.ok) {
-                            tg.showAlert("Reward Added Successfully!");
-                            loadBalance(); // Screen update karo
+                            tg.showAlert("Reward Added!");
+                            loadBalance();
                         }
-                    } catch (e) { tg.showAlert("Server Error!"); }
+                    } catch (e) { tg.showAlert("Server Error! Check if Termux is running."); }
                 }
             });
         }
 
-        function handleWithdraw() {
-            tg.showAlert("Minimum withdraw is $2.00. Keep earning!");
-        }
-
-        // App khulte hi balance check karo
         loadBalance();
     </script>
 </body>
